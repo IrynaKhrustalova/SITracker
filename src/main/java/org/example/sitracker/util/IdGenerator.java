@@ -1,4 +1,4 @@
-package util;
+package org.example.sitracker.util;
 
 import org.springframework.stereotype.Component;
 

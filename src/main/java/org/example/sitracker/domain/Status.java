@@ -1,4 +1,4 @@
-package domain;
+package org.example.sitracker.domain;
 
 public enum Status {
     OPEN,

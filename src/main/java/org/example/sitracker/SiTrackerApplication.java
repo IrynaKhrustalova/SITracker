@@ -9,5 +9,4 @@ public class SiTrackerApplication {
     public static void main(String[] args) {
         SpringApplication.run(SiTrackerApplication.class, args);
     }
-
 }

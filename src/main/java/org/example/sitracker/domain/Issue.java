@@ -1,4 +1,4 @@
-package domain;
+package org.example.sitracker.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -6,18 +6,20 @@ import java.util.Objects;
 public class Issue {
     private String id;
     private String description;
-    private String parentId;     // null allowed
+    private String parentId;
     private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Issue (String id, String description, String parentId, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Issue() {
+    }
+
+    public Issue (String id, String description, String parentId, Status status, LocalDateTime createdAt) {
         this.id = id;
         this.description  = description;
         this.parentId = parentId;
         this.status = status;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public String getId() {

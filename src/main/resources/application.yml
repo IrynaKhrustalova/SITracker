@@ -1,0 +1,5 @@
+sitracker:
+  spreadsheet:
+    id: ${SPREADSHEET_ID:}
+    google:
+      credentials: ${GOOGLE_APPLICATION_CREDENTIALS:}

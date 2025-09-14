@@ -1,13 +1,13 @@
-package repository;
+package org.example.sitracker.repository;
 
-import domain.Issue;
-import domain.Status;
+import org.example.sitracker.domain.Issue;
+import org.example.sitracker.domain.Status;
 import java.util.List;
 import java.util.Optional;
 
 public interface IssueRepository {
 
-    Issue save(Issue issue);
+    void save(Issue issue);
 
     Optional<Issue> findById(String id);
 

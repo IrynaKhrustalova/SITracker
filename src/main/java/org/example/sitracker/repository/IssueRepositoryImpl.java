@@ -1,16 +1,17 @@
-package repository;
+package org.example.sitracker.repository;
 
-import domain.Issue;
-import domain.Status;
+import org.example.sitracker.domain.Issue;
+import org.example.sitracker.domain.Status;
+import org.springframework.stereotype.Repository;
 import java.util.*;
 
+@Repository
 public class IssueRepositoryImpl implements IssueRepository {
     private final Map<String, Issue> store = new HashMap<>();
 
     @Override
-    public Issue save(Issue issue) {
+    public void save(Issue issue) {
         store.put(issue.getId(), issue);
-        return issue;
     }
 
     @Override

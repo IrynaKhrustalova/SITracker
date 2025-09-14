@@ -1,13 +1,15 @@
-package service;
+package org.example.sitracker.service;
 
-import domain.Issue;
-import domain.Status;
-import repository.IssueRepository;
-import util.IdGenerator;
+import org.example.sitracker.domain.Issue;
+import org.example.sitracker.domain.Status;
+import org.example.sitracker.repository.IssueRepository;
+import org.example.sitracker.util.IdGenerator;
+import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class IssueServiceImpl implements IssueService {
     private final IssueRepository issueRepository;
     private final IdGenerator idGenerator;
@@ -21,8 +23,8 @@ public class IssueServiceImpl implements IssueService {
     public Issue createIssue(String description, String parentId) {
         String id = idGenerator.nextId();
         LocalDateTime createdAt = LocalDateTime.now();
-        LocalDateTime updatedAt = LocalDateTime.now();
-        return new Issue(id, description, parentId, Status.OPEN, createdAt, updatedAt);
+
+        return new Issue(id, description, parentId, Status.OPEN, createdAt);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<Issue> listIssuesByStatus(Status status) {
-        if (status == null) {
+        if (status != null) {
             return issueRepository.findByStatus(status);
         } else {
             throw new IllegalArgumentException("Invalid status");

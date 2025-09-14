@@ -1,7 +1,7 @@
-package service;
+package org.example.sitracker.service;
 
-import domain.Issue;
-import domain.Status;
+import org.example.sitracker.domain.Issue;
+import org.example.sitracker.domain.Status;
 import java.util.List;
 
 public interface IssueService {
