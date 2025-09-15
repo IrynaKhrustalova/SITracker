@@ -8,6 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * Default implementation of {@link IssueService} backed by an {@link IssueRepository}.
+ *
+ * <p>This service creates, updates, and queries issues, delegating all persistence
+ * operations to the repository. It wraps low-level exceptions into more user-friendly
+ * runtime exceptions.
+ */
 @Service
 public class IssueServiceImpl implements IssueService {
     private static final Logger log = LoggerFactory.getLogger(IssueServiceImpl.class);

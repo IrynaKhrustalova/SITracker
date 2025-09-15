@@ -3,6 +3,12 @@ package org.example.sitracker.domain;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Domain entity representing an issue in the SiTracker system.
+ *
+ * <p>Each issue has an id (e.g., {@code AD-1}), a description, optional parent id,
+ * status, and timestamps for creation and last update.
+ */
 public class Issue {
     private String id;
     private String description;
@@ -12,14 +18,6 @@ public class Issue {
     private LocalDateTime updatedAt;
 
     public Issue() {
-    }
-
-    public Issue (String id, String description, String parentId, Status status, LocalDateTime createdAt) {
-        this.id = id;
-        this.description  = description;
-        this.parentId = parentId;
-        this.status = status;
-        this.createdAt = createdAt;
     }
 
     public String getId() {
