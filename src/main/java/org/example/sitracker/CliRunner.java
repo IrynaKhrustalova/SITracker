@@ -30,10 +30,7 @@ public class CliRunner implements CommandLineRunner {
         root.addSubcommand("create", new CreateCommand(issueService));
         root.addSubcommand("update", new UpdateCommand(issueService));
         root.addSubcommand("list",   new ListCommand(issueService));
-
-        int exitCode = root.execute(args);
-
-        System.exit(exitCode);
+        root.execute(args);
     }
 
 }

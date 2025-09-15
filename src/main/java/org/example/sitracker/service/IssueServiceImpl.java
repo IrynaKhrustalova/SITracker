@@ -2,7 +2,7 @@ package org.example.sitracker.service;
 
 import org.example.sitracker.domain.Issue;
 import org.example.sitracker.domain.Status;
-import org.example.sitracker.repository.GoogleSheetsIssueRepository;
+import org.example.sitracker.repository.IssueRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class IssueServiceImpl implements IssueService {
     private static final Logger log = LoggerFactory.getLogger(IssueServiceImpl.class);
-    private final GoogleSheetsIssueRepository issueRepository;
+    private final IssueRepository issueRepository;
 
-    public IssueServiceImpl(GoogleSheetsIssueRepository issueRepository) {
+    public IssueServiceImpl(IssueRepository issueRepository) {
         this.issueRepository = issueRepository;
     }
 
