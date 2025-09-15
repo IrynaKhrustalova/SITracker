@@ -9,20 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for GoogleSheetsIssueRepositoryImpl.
- *
  * These tests mock the Google Sheets client classes (Sheets, Spreadsheets, Values and the
  * request objects) so tests run offline.
  */
@@ -57,7 +52,7 @@ class GoogleSheetsIssueRepositoryImplTest {
     final String spreadsheetId = "spreadsheet-123";
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         // basic wiring of sheets -> spreadsheets -> values
         when(sheets.spreadsheets()).thenReturn(spreadsheets);
         when(spreadsheets.values()).thenReturn(values);
@@ -217,7 +212,4 @@ class GoogleSheetsIssueRepositoryImplTest {
         assertEquals("AD-1", b.getParentId());
         assertEquals(Status.IN_PROGRESS, b.getStatus());
     }
-
-    // Helper: verify date formatting if needed
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 }

@@ -25,7 +25,7 @@ class CliRunnerTest {
     CliRunner cliRunner;
 
     @Test
-    void run_withNoArgs_doesNothing() throws Exception {
+    void run_withNoArgs_doesNothing() {
         // act
         cliRunner.run(); // no args
 
@@ -34,7 +34,7 @@ class CliRunnerTest {
     }
 
     @Test
-    void run_createCommand_invokesCreateIssue() throws Exception {
+    void run_createCommand_invokesCreateIssue() {
         // arrange: stub service to return an Issue when createIssue is called (optional)
         Issue stub = new Issue();
         stub.setId("AD-1");
@@ -49,7 +49,7 @@ class CliRunnerTest {
     }
 
     @Test
-    void run_updateCommand_invokesUpdateIssueStatus() throws Exception {
+    void run_updateCommand_invokesUpdateIssueStatus() {
         // arrange
         Issue updated = new Issue();
         updated.setId("AD-2");
@@ -65,7 +65,7 @@ class CliRunnerTest {
     }
 
     @Test
-    void run_listCommand_invokesListIssuesByStatus() throws Exception {
+    void run_listCommand_invokesListIssuesByStatus() {
         // arrange
         when(issueService.listIssuesByStatus(Status.OPEN)).thenReturn(java.util.List.of());
 

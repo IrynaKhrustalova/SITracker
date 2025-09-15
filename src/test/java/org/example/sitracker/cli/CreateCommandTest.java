@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CreateCommandTest {
 
     @Test
-    void createCommand_callsService_and_printsResult() throws Exception {
+    void createCommand_callsService_and_printsResult() {
         IssueService svc = mock(IssueService.class);
         Issue stub = new Issue();
         stub.setId("AD-1");

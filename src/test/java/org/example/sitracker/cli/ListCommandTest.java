@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ListCommandTest {
 
     @Test
-    void listCommand_printsIssues() throws Exception {
+    void listCommand_printsIssues() {
         IssueService svc = mock(IssueService.class);
         Issue i1 = new Issue(); i1.setId("AD-1"); i1.setDescription("one"); i1.setStatus(Status.OPEN);
         Issue i2 = new Issue(); i2.setId("AD-2"); i2.setDescription("two"); i2.setStatus(Status.OPEN);

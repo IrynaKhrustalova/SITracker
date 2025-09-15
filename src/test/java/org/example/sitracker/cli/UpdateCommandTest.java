@@ -54,7 +54,7 @@ class UpdateCommandTest {
         CommandLine cli = new CommandLine(cmd);
 
         // Act: positional first, then -s option
-        int exit = cli.execute("AD-1", "-s", "CLOSED");
+        cli.execute("AD-1", "-s", "CLOSED");
 
         String out = outBaos.toString();
         assertTrue(out.contains("Updated issue: AD-1 -> CLOSED"), "Expected success message in stdout: " + out);
@@ -71,6 +71,11 @@ class UpdateCommandTest {
 
         UpdateCommand cmd = new UpdateCommand(svc);
         CommandLine cli = new CommandLine(cmd);
+
+        // Act
+        cli.execute("MISSING", "-s", "CLOSED");
+
+        verify(svc, times(1)).updateIssueStatus("MISSING", Status.CLOSED);
 
         // stdout should be empty or not contain success message
         String out = outBaos.toString();

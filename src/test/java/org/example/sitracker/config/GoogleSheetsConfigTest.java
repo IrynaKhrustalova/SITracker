@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for GoogleSheetsConfig using reflection to set private fields
  * and to invoke the private resolveCredentialsStream() helper.
- *
  * These tests avoid creating the real Sheets client and therefore do not
  * require real Google credentials or network access.
  */
