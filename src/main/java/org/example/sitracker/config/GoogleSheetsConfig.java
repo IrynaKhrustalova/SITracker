@@ -42,7 +42,6 @@ public class GoogleSheetsConfig {
     }
 
     private InputStream resolveCredentialsStream() throws Exception {
-        // prefer explicit property, then GOOGLE_APPLICATION_CREDENTIALS env var
         String path = credentialsPath != null ? credentialsPath : System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
         if (path != null && !path.isBlank()) {
             return new FileInputStream(path);

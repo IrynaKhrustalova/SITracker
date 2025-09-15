@@ -1,5 +1,5 @@
 sitracker:
+  google:
+    credentials: Your path to the JSON file
   spreadsheet:
-    id: ${SPREADSHEET_ID:}
-    google:
-      credentials: ${GOOGLE_APPLICATION_CREDENTIALS:}
+    id: Your spreadsheet ID

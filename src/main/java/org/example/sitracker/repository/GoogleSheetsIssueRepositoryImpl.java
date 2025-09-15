@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueRepository {
     private final Sheets sheets;
     private final String spreadsheetId;
-    private final String sheetName = "Issues"; // change if necessary
+    private final String sheetName = "Issues";
     private final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private final List<String> HEADER = List.of("ID", "Description", "Parent ID", "Status", "Created at", "Updated at");
 
@@ -33,7 +33,6 @@ public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueReposit
         }
         LocalDateTime now = LocalDateTime.now();
         if (issue.getCreatedAt() == null) issue.setCreatedAt(now);
-        issue.setUpdatedAt(now);
         if (issue.getStatus() == null) issue.setStatus(Status.OPEN);
 
         List<Object> row = List.of(
@@ -41,8 +40,7 @@ public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueReposit
                 issue.getDescription(),
                 issue.getParentId() == null ? "" : issue.getParentId(),
                 issue.getStatus().name(),
-                issue.getCreatedAt().format(dtf),
-                issue.getUpdatedAt().format(dtf)
+                issue.getCreatedAt().format(dtf)
         );
 
         ValueRange body = new ValueRange().setValues(List.of(row));
@@ -50,7 +48,6 @@ public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueReposit
                 .append(spreadsheetId, sheetName + "!A:F", body)
                 .setValueInputOption("USER_ENTERED")
                 .execute();
-
         return issue;
     }
 
@@ -65,7 +62,7 @@ public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueReposit
             if (!r.isEmpty()) {
                 String curId = r.get(0).toString();
                 if (id.equals(curId)) {
-                    foundRow = i + 1; // sheet rows are 1-based
+                    foundRow = i + 1;
                     break;
                 }
             }
