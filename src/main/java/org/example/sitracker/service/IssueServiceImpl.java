@@ -42,13 +42,6 @@ public class IssueServiceImpl implements IssueService {
         try{
             log.info("Update issue service");
             return issueRepository.updateStatus(issueId, newStatus);
-//            Optional<Issue> issue = issueRepository.findById(issueId);
-//            if (issue.isPresent()) {
-//                Issue issueFromStore = issue.get();
-//                issueFromStore.setStatus(newStatus);
-//                issueFromStore.setUpdatedAt(LocalDateTime.now());
-//                return issueFromStore;
-//            }
         } catch (Exception e) {
             throw new IllegalArgumentException("Issue not found");
         }
