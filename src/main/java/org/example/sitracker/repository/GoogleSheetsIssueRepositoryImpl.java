@@ -11,6 +11,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@link IssueRepository} backed by a Google Sheets document.
+ *
+ * <p>The repository persists {@link Issue} rows into a sheet named {@code Issues}. Each row
+ * contains columns in the order defined by {@link #HEADER}:
+ * <pre>
+ * ID | Description | Parent ID | Status | Created at | Updated at
+ * </pre>
+ *
+ * <p>Concurrency: all public write operations are synchronized to avoid concurrent updates
+ * to the same sheet from within this JVM instance.
+ */
 @Repository
 public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
     private final Sheets sheets;
@@ -19,11 +31,29 @@ public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
     private final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private final List<String> HEADER = List.of("ID", "Description", "Parent ID", "Status", "Created at", "Updated at");
 
+    /**
+     * Constructs a new repository bound to the given Sheets client and spreadsheet id.
+     *
+     * @param sheets        authenticated Google Sheets client
+     * @param spreadsheetId id of the spreadsheet where issues are stored
+     */
     public GoogleSheetsIssueRepositoryImpl(Sheets sheets, String spreadsheetId) {
         this.sheets = sheets;
         this.spreadsheetId = spreadsheetId;
     }
 
+    /**
+     * Saves a new {@link Issue} into the sheet.
+     * <ul>
+     *     <li>If the issue has no id, a new one is generated with prefix {@code AD-}.</li>
+     *     <li>If {@code createdAt} is null, it is set to {@link LocalDateTime#now()}.</li>
+     *     <li>If {@code status} is null, it defaults to {@link Status#OPEN}.</li>
+     * </ul>
+     *
+     * @param issue issue to persist
+     * @return the saved issue (with id and timestamps populated if needed)
+     * @throws IOException if the Sheets API call fails
+     */
     @Override
     public synchronized Issue save(Issue issue) throws IOException {
         ensureHeaderExists();
@@ -51,6 +81,15 @@ public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
         return issue;
     }
 
+    /**
+     * Updates the status of an existing issue in the sheet.
+     *
+     * @param id        issue id to update
+     * @param newStatus new status
+     * @return updated issue object
+     * @throws IOException             if Sheets API call fails
+     * @throws NoSuchElementException  if the issue id cannot be found
+     */
     @Override
     public synchronized Issue updateStatus(String id, Status newStatus) throws IOException {
         List<List<Object>> rows = readRawRows();
@@ -108,18 +147,24 @@ public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<Issue> findById(String id) throws IOException {
-        return findAll().stream().filter(i -> i.getId().equals(id)).findFirst();
-    }
-
     // ------------- helpers --------------
 
+    /**
+     * Reads all raw rows from the sheet (range A:F).
+     *
+     * @return list of rows; may be {@code null} if sheet is empty
+     * @throws IOException if Sheets API call fails
+     */
     private List<List<Object>> readRawRows() throws IOException {
         ValueRange resp = sheets.spreadsheets().values().get(spreadsheetId, sheetName + "!A:F").execute();
         return resp.getValues();
     }
 
+    /**
+     * Ensures the header row (A1:F1) exists and matches {@link #HEADER}.
+     *
+     * @throws IOException if Sheets API call fails
+     */
     private void ensureHeaderExists() throws IOException {
         ValueRange resp = sheets.spreadsheets().values().get(spreadsheetId, sheetName + "!A1:F1").execute();
         List<List<Object>> rows = resp.getValues();
@@ -130,6 +175,12 @@ public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
         }
     }
 
+    /**
+     * Converts a raw row of sheet values into an {@link Issue}.
+     *
+     * @param row list of cell values (0–5 columns)
+     * @return parsed issue
+     */
     private Issue parseRowToIssue(List<Object> row) {
         String id = getCell(row, 0);
         String desc = getCell(row, 1);
@@ -154,17 +205,37 @@ public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
         return issue;
     }
 
+    /**
+     * Safely extracts a string cell value from a row.
+     *
+     * @param row row list
+     * @param idx cell index
+     * @return cell value as string, or empty string if not present
+     */
     private String getCell(List<Object> row, int idx) {
         if (row == null || row.size() <= idx) return "";
         Object v = row.get(idx);
         return v == null ? "" : v.toString();
     }
 
+    /**
+     * Parses a date string into {@link LocalDateTime} using {@link #dtf}.
+     *
+     * @param s date string, may be {@code null} or blank
+     * @return parsed {@link LocalDateTime}, or {@code null} if parse fails
+     */
     private LocalDateTime parseDate(String s) {
         if (s == null || s.isBlank()) return null;
         try { return LocalDateTime.parse(s, dtf); } catch (Exception ex) { return null; }
     }
 
+    /**
+     * Generates the next sequential issue id with prefix {@code AD-}.
+     * Scans the sheet for the maximum numeric suffix and increments it.
+     *
+     * @return next id string (e.g., {@code AD-1}, {@code AD-2}, …)
+     * @throws IOException if Sheets API call fails
+     */
     private String generateNextId() throws IOException {
         List<List<Object>> rows = readRawRows();
         int max = 0;
