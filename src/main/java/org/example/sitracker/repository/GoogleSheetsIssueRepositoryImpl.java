@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
-public class GoogleSheetsIssueRepositoryImpl implements GoogleSheetsIssueRepository {
+public class GoogleSheetsIssueRepositoryImpl implements IssueRepository {
     private final Sheets sheets;
     private final String spreadsheetId;
     private final String sheetName = "Issues";
